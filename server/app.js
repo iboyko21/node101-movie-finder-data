@@ -16,21 +16,63 @@ app.use(function(req, res, next) {
     next();
 });
 
-const api_key = process.env.API_KEY;
-const url = `http://www.omdbapi.com/?i=tt3896198&apikey=${api_key}`;
-
-
+const key = process.env.API_KEY;
 // Server should respond to GET requests to /?i=tt3896198 with movie data
+// Server should respond to GET requests to /?t=baby%20driver with movie data
+// Server should respond to GET requests with movie data, without fetching from the OMDb API
+let movieData = [];
 app.get('/', function(req, res) {
-    // res.status(200).send('This is the / route'); 
-    axios.get(url)
-    // .then(response => res.json(response.data));
-    .then(function (response) {
-        res.json(response.data);
+    // console.log(req.query);
+    // console.log("Number of movies in array: " + movieData.length);
+    // console.log(movieData);
 
-        console.log("Response.data: " + response.data); 
-        console.log("Res: " + res); 
-    });
+    // check if incomming id or title already exist inside movieData array
+    if (req.query.hasOwnProperty('i')){
+        let index = movieData.findIndex(element => {
+            if (element.imdbID === req.query.i) {
+              return true;
+            }
+            return false;
+          });
+
+          if (index != -1){
+              res.json(JSON.stringify(movieData[index]));
+              return movieData[index];
+          } else {
+                let id = req.url;
+                let url = `http://www.omdbapi.com/${id}&apikey=${key}`;
+                axios.get(url)
+                .then(function (movie) {
+                    res.json(movie.data);
+                    movieData.push(movie.data);
+                    return movieData[index];
+                });
+          }
+    } 
+    else if (req.query.hasOwnProperty('t')){
+        let index = movieData.findIndex(element => {
+            if ((element.Title).toLowerCase() === req.query.t) {
+              return true;
+            }
+            return false;
+          });
+          if (index != -1){
+              res.json(JSON.stringify(movieData[index]));
+              return movieData[index]
+          } else {
+                let id = req.url;
+                let url = `http://www.omdbapi.com/${id}&apikey=${key}`;
+                axios.get(url)
+                .then(function (movie) {
+                    res.json(movie.data);
+                    movieData.push(movie.data);
+                    return movieData;
+                });
+          }
+    }
+
 });
+    
+  
 
 module.exports = app;
