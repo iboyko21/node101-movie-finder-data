@@ -21,7 +21,8 @@ const key = process.env.API_KEY;
 let movieData = [];
 app.get('/', function(req, res) {
     // check if incomming id or title already exist inside movieData array
-    if (req.query.hasOwnProperty('i')){
+        // check by ID
+    if (req.query.hasOwnProperty('i')){ 
         let index = movieData.findIndex(element => {
             if (element.imdbID === req.query.i) {
               return true;
@@ -42,7 +43,8 @@ app.get('/', function(req, res) {
                     return;
                 });
           }
-    } else if (req.query.hasOwnProperty('t')){
+          // check by title
+    } else if (req.query.hasOwnProperty('t')){ 
         let index = movieData.findIndex(element => {
             if ((element.Title).toLowerCase() === req.query.t) {
               return true;
