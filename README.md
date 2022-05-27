@@ -1,6 +1,6 @@
 # node101-movie-finder-data
 
-## Exit Criteria
+### Exit Criteria
 
 * Server should log each request using `morgan`'s dev format
 
