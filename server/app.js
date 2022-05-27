@@ -2,10 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const morgan = require('morgan');
 require('dotenv').config();
-// console.log(process.env); 
 
 const app = express();
-
 // Server should log each request using morgan's dev format
 app.use(morgan('dev'));
 
@@ -22,10 +20,6 @@ const key = process.env.API_KEY;
 // Server should respond to GET requests with movie data, without fetching from the OMDb API
 let movieData = [];
 app.get('/', function(req, res) {
-    // console.log(req.query);
-    // console.log("Number of movies in array: " + movieData.length);
-    // console.log(movieData);
-
     // check if incomming id or title already exist inside movieData array
     if (req.query.hasOwnProperty('i')){
         let index = movieData.findIndex(element => {
@@ -36,43 +30,41 @@ app.get('/', function(req, res) {
           });
 
           if (index != -1){
-              res.json(JSON.stringify(movieData[index]));
-              return movieData[index];
+              res.status(200).send(movieData[index]);
+              return;
           } else {
                 let id = req.url;
                 let url = `http://www.omdbapi.com/${id}&apikey=${key}`;
                 axios.get(url)
                 .then(function (movie) {
-                    res.json(movie.data);
+                    res.status(200).send(movie.data);
                     movieData.push(movie.data);
-                    return movieData[index];
+                    return;
                 });
           }
-    } 
-    else if (req.query.hasOwnProperty('t')){
+    } else if (req.query.hasOwnProperty('t')){
         let index = movieData.findIndex(element => {
             if ((element.Title).toLowerCase() === req.query.t) {
               return true;
             }
             return false;
           });
+
           if (index != -1){
-              res.json(JSON.stringify(movieData[index]));
-              return movieData[index]
+            res.status(200).send(movieData[index]);
+              return;
           } else {
                 let id = req.url;
                 let url = `http://www.omdbapi.com/${id}&apikey=${key}`;
                 axios.get(url)
                 .then(function (movie) {
-                    res.json(movie.data);
+                    res.status(200).send(movie.data);
                     movieData.push(movie.data);
-                    return movieData;
+                    return;
                 });
           }
     }
 
 });
     
-  
-
 module.exports = app;
