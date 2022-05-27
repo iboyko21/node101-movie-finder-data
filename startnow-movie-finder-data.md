@@ -34,7 +34,7 @@ When making a second request to the same endpoint [http://localhost:3000/?i=tt38
 
 1. Open a terminal
 2. Open the project folder in VS Code using the following command: `code ~/ocastartnow-movie-finder-data`
-3. Run: `npm install`.
+3. Run: `npm install`
 
 The tests will confirm if you have completed the requirements. Type `npm test` and hit enter to run the tests. Then, write your code using the steps below. When you have written all the code to complete the project (based on the exit criteria) and the tests are passing, submit the assignment.
 
