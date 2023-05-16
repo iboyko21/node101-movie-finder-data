@@ -27,7 +27,6 @@ function withMovie(i) {
   }
 }
 
-
 mock
   .onGet('http://www.omdbapi.com', { params: { i: 'tt3896198', apiKey: '8730e0e' }})
   .replyOnce(withMovie(0))
